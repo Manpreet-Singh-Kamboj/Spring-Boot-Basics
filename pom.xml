@@ -8,11 +8,11 @@
 		<version>3.4.2</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.firstproject</groupId>
-	<artifactId>firstproject</artifactId>
+	<groupId>com.blogapp</groupId>
+	<artifactId>blogapp</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>firstproject</name>
-	<description>Learning Spring Boot</description>
+	<name>blogapp</name>
+	<description>Blog App APIS using Spring Boot</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -60,7 +60,12 @@
 			<version>1.18.36</version>
 			<scope>provided</scope>
 		</dependency>
-
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<scope>runtime</scope>
+			<optional>true</optional>
+		</dependency>
 	</dependencies>
 
 	<build>
