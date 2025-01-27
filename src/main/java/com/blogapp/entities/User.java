@@ -4,6 +4,7 @@ import com.blogapp.constants.Roles;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
@@ -44,14 +45,13 @@ public class User {
             message = "Name length must be greater than 1 character and less than 50 characters.")
     private String fullName;
     @Column(
-            name = "user_email"
+            name = "user_email",
+            unique = true
     )
     @NotEmpty(
             message = "Email is required."
     )
-    @Email(
-            regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\\\.[A-Za-z]{2,}$"
-    )
+    @Email()
     private String email;
     @Column(
             name = "user_password"
