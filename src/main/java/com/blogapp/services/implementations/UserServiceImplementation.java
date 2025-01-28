@@ -2,12 +2,11 @@ package com.blogapp.services.implementations;
 
 import com.blogapp.dto.UserDto;
 import com.blogapp.entities.User;
+import com.blogapp.exceptions.EmailAlreadyExistException;
 import com.blogapp.repository.UserRepository;
 import com.blogapp.services.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,6 +21,7 @@ public class UserServiceImplementation  implements UserService {
     public UserDto createUser(UserDto userDto) {
         if(this.userRepository.existsByEmail(userDto.getEmail())){
             ///TODO: Add Appropriate Exception
+            throw new EmailAlreadyExistException("User","email",userDto.getEmail());
         }
         User user = this.modelMapper.map(userDto,User.class);
         User createdUser = this.userRepository.save(user);
