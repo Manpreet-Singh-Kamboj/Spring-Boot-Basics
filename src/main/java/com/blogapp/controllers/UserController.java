@@ -29,11 +29,21 @@ public class UserController {
     public ResponseEntity<ApiResponseDto> deleteUserHandler(@PathVariable("userId") String userId){
         this.userService.deleteUser(userId);
         ApiResponseDto apiResponseDto = new ApiResponseDto(true,"User deleted Successfully.");
-        return new ResponseEntity<>(apiResponseDto,HttpStatus.OK);
+        return new ResponseEntity<ApiResponseDto>(apiResponseDto,HttpStatus.OK);
     }
     // PUT REQ -> UPDATE USER
+    @PutMapping("/update/{userId}")
+    public ResponseEntity<UserDto> updateUserHandler(@Valid @RequestBody UserDto userDto,@PathVariable("userId") String userId){
+        UserDto updatedUser = this.userService.updateUser(userDto,userId);
+        return new ResponseEntity<UserDto>(updatedUser,HttpStatus.OK);
+    }
 
     //GET REQ -> GET USER BY ID OR GET ALL USERS
+    @GetMapping("/{userId}")
+    public ResponseEntity<UserDto> getUserByIdHandler(@PathVariable("userId") String userId){
+        UserDto fetchedUser = this.userService.getUserById(userId);
+        return new ResponseEntity<>(fetchedUser,HttpStatus.OK);
+    }
     @GetMapping
     public ResponseEntity<List<UserDto>> getAllUserHandler(){
         List<UserDto> allUsers = this.userService.getAllUsers();

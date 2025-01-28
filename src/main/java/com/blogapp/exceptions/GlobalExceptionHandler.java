@@ -35,4 +35,12 @@ public class GlobalExceptionHandler {
         ApiResponseDto apiResponseDto = new ApiResponseDto(false,errorMessage);
         return new ResponseEntity<>(apiResponseDto,HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(InvalidRoleException.class)
+    public ResponseEntity<ApiResponseDto> invalidRoleExceptionHandler(InvalidRoleException invalidRoleException){
+        String message = invalidRoleException.getMessage();
+        ApiResponseDto apiResponseDto = new ApiResponseDto(false,message);
+        return new ResponseEntity<>(apiResponseDto,HttpStatus.BAD_REQUEST);
+    }
+
 }

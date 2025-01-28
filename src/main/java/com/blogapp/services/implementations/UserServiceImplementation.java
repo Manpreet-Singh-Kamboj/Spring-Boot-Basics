@@ -1,5 +1,6 @@
 package com.blogapp.services.implementations;
 
+import com.blogapp.constants.Roles;
 import com.blogapp.exceptions.ResourceNotFoundException;
 import com.blogapp.payloads.UserDto;
 import com.blogapp.entities.User;
@@ -10,7 +11,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -37,14 +41,31 @@ public class UserServiceImplementation  implements UserService {
         this.userRepository.deleteById(user.getId());
     }
 
-    @Override
     public UserDto updateUser(UserDto userDto, String userId) {
-        return null;
+        User user = this.userRepository.findById(userId).orElseThrow(()-> new ResourceNotFoundException("User","Id",userId));
+        if(userDto.getEmail() != null){
+            user.setEmail(userDto.getEmail());
+        }
+        if(userDto.getBio() != null){
+            user.setBio(userDto.getBio());
+        }
+        if(userDto.getRole() != null){
+            user.setRole(userDto.getRole());
+        }
+        if(userDto.getFullName() != null){
+            user.setFullName(userDto.getFullName());
+        }
+        if(userDto.getPassword() != null){
+            user.setPassword(userDto.getPassword());
+        }
+        this.userRepository.save(user);
+        return this.modelMapper.map(user,UserDto.class);
     }
 
     @Override
     public UserDto getUserById(String userId) {
-        return null;
+        User user = this.userRepository.findById(userId).orElseThrow(()-> new ResourceNotFoundException("User","Id",userId));
+        return this.modelMapper.map(user,UserDto.class);
     }
 
     @Override
