@@ -1,5 +1,6 @@
 package com.blogapp.services.implementations;
 
+import com.blogapp.exceptions.ResourceNotFoundException;
 import com.blogapp.payloads.UserDto;
 import com.blogapp.entities.User;
 import com.blogapp.exceptions.EmailAlreadyExistException;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImplementation  implements UserService {
@@ -30,8 +32,9 @@ public class UserServiceImplementation  implements UserService {
     }
 
     @Override
-    public void deleteUser(UserDto userDto) {
-
+    public void deleteUser(String userId) {
+        User user = this.userRepository.findById(userId).orElseThrow(()-> new ResourceNotFoundException("User","Id",userId));
+        this.userRepository.deleteById(user.getId());
     }
 
     @Override
@@ -46,6 +49,7 @@ public class UserServiceImplementation  implements UserService {
 
     @Override
     public List<UserDto> getAllUsers() {
-        return null;
+        List<User> users = this.userRepository.findAll();
+        return users.stream().map(user->this.modelMapper.map(user,UserDto.class)).collect(Collectors.toList());
     }
 }

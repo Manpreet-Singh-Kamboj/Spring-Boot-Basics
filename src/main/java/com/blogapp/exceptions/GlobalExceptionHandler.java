@@ -19,7 +19,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<ApiResponseDto>(apiResponseDto, HttpStatus.CONFLICT);
     }
     @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<Map<String,String>> handleMethodArgumentNotValidExceptionHandler(ConstraintViolationException constraintViolationException){
+    public ResponseEntity<Map<String,String>> methodArgumentNotValidExceptionHandler(ConstraintViolationException constraintViolationException){
         Map<String,String> response = new HashMap<String,String>();
         constraintViolationException.getConstraintViolations().forEach(violation-> {
             String fieldName = violation.getPropertyPath().toString();
@@ -27,5 +27,12 @@ public class GlobalExceptionHandler {
             response.put(fieldName,message);
         });
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ApiResponseDto> resourceNotFoundExceptionHandler(ResourceNotFoundException resourceNotFoundException){
+        String errorMessage = resourceNotFoundException.getMessage();
+        ApiResponseDto apiResponseDto = new ApiResponseDto(false,errorMessage);
+        return new ResponseEntity<>(apiResponseDto,HttpStatus.BAD_REQUEST);
     }
 }

@@ -1,15 +1,16 @@
 package com.blogapp.controllers;
 
+import com.blogapp.entities.User;
+import com.blogapp.payloads.ApiResponseDto;
 import com.blogapp.payloads.UserDto;
 import com.blogapp.services.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
@@ -24,8 +25,18 @@ public class UserController {
     }
 
     // DELETE REQ -> DELETE USER
-
+    @DeleteMapping("/delete/{userId}")
+    public ResponseEntity<ApiResponseDto> deleteUserHandler(@PathVariable("userId") String userId){
+        this.userService.deleteUser(userId);
+        ApiResponseDto apiResponseDto = new ApiResponseDto(true,"User deleted Successfully.");
+        return new ResponseEntity<>(apiResponseDto,HttpStatus.OK);
+    }
     // PUT REQ -> UPDATE USER
 
     //GET REQ -> GET USER BY ID OR GET ALL USERS
+    @GetMapping
+    public ResponseEntity<List<UserDto>> getAllUserHandler(){
+        List<UserDto> allUsers = this.userService.getAllUsers();
+        return new ResponseEntity<>(allUsers,HttpStatus.OK);
+    }
 }
