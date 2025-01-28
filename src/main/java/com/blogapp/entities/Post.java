@@ -53,12 +53,14 @@ public class Post {
     )
     private String imageUrl;
     @OneToMany(
-            mappedBy = "post"
+            mappedBy = "post",
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY,
+            orphanRemoval = true
     )
     List<Comment> comments = new ArrayList<>();
     @ManyToMany(
             mappedBy = "posts",
-            cascade = CascadeType.ALL,
             fetch = FetchType.LAZY
     )
     List<Category> categories = new ArrayList<>();

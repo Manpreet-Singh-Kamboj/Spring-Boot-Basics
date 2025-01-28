@@ -37,7 +37,10 @@ public class Category {
             message = "Category cannot be empty"
     )
     private String category;
-    @ManyToMany()
+    @ManyToMany(
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY
+    )
     @JoinTable(
             name = "category_post",
             joinColumns = {
