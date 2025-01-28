@@ -4,12 +4,12 @@ import com.blogapp.constants.Roles;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity(
@@ -51,7 +51,9 @@ public class User {
     @NotEmpty(
             message = "Email is required."
     )
-    @Email()
+    @Email(
+            message = "Email is not a valid email."
+    )
     private String email;
     @Column(
             name = "user_password"
@@ -59,9 +61,17 @@ public class User {
     @NotEmpty(
             message = "Password cannot be empty."
     )
+    @Size(
+            min = 6,
+            max = 32,
+            message = "Password must be at least 6 characters."
+    )
     private String password;
     @Column(
             name = "user_bio"
+    )
+    @Size(
+            max = 1500
     )
     private String bio;
     @Column(
@@ -77,14 +87,14 @@ public class User {
             fetch = FetchType.LAZY,
             orphanRemoval = true
     )
-    private List<Post> posts;
+    private List<Post> posts = new ArrayList<>();
     @OneToMany(
             mappedBy = "user",
             cascade = CascadeType.ALL,
             fetch = FetchType.LAZY,
             orphanRemoval = true
     )
-    private List<Comment> comments;
+    private List<Comment> comments = new ArrayList<>();
     public User(){
 
     }

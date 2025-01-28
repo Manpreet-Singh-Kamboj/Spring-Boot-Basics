@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -54,21 +55,18 @@ public class Post {
     @OneToMany(
             mappedBy = "post"
     )
-    List<Comment> comments;
+    List<Comment> comments = new ArrayList<>();
     @ManyToMany(
             mappedBy = "posts",
             cascade = CascadeType.ALL,
             fetch = FetchType.LAZY
     )
-    List<Category> categories;
+    List<Category> categories = new ArrayList<>();
     @ManyToOne()
     @JoinColumn(
             name = "user_id"
     )
     private User user;
-    @Temporal(
-            TemporalType.DATE
-    )
     @Column(
             name = "added_date"
     )

@@ -1,7 +1,8 @@
 package com.blogapp.controllers;
 
-import com.blogapp.dto.UserDto;
+import com.blogapp.payloads.UserDto;
 import com.blogapp.services.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,7 @@ public class UserController {
     private UserService userService;
     // POST REQ -> CREATE USER
     @PostMapping("/sign-up")
-    public ResponseEntity<UserDto> createUserHandler(@RequestBody UserDto userDto){
+    public ResponseEntity<UserDto> createUserHandler(@Valid @RequestBody UserDto userDto){
         UserDto createdUser = this.userService.createUser(userDto);
         return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
     }

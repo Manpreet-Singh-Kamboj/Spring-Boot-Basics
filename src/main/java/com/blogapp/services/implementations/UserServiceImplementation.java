@@ -1,6 +1,6 @@
 package com.blogapp.services.implementations;
 
-import com.blogapp.dto.UserDto;
+import com.blogapp.payloads.UserDto;
 import com.blogapp.entities.User;
 import com.blogapp.exceptions.EmailAlreadyExistException;
 import com.blogapp.repository.UserRepository;
@@ -15,7 +15,8 @@ import java.util.List;
 public class UserServiceImplementation  implements UserService {
     @Autowired
     private UserRepository userRepository;
-    private final ModelMapper modelMapper = new ModelMapper();
+    @Autowired
+    private ModelMapper modelMapper;
 
     @Override
     public UserDto createUser(UserDto userDto) {

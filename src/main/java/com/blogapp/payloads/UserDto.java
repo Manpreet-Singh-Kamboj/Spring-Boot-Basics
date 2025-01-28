@@ -1,4 +1,4 @@
-package com.blogapp.dto;
+package com.blogapp.payloads;
 
 import com.blogapp.constants.Roles;
 import lombok.Getter;
