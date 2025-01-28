@@ -33,7 +33,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponseDto> resourceNotFoundExceptionHandler(ResourceNotFoundException resourceNotFoundException){
         String errorMessage = resourceNotFoundException.getMessage();
         ApiResponseDto apiResponseDto = new ApiResponseDto(false,errorMessage);
-        return new ResponseEntity<>(apiResponseDto,HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(apiResponseDto,HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(InvalidRoleException.class)
