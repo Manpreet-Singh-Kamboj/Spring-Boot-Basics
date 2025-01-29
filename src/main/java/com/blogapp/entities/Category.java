@@ -58,7 +58,7 @@ public class Category {
                     )
             }
     )
-    @JsonBackReference
+    @JsonManagedReference
     private List<Post> posts = new ArrayList<>();
 
     public Category(){

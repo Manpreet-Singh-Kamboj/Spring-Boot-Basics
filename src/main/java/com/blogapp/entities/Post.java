@@ -1,5 +1,6 @@
 package com.blogapp.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
@@ -66,7 +67,7 @@ public class Post {
             mappedBy = "posts",
             fetch = FetchType.LAZY
     )
-    @JsonManagedReference
+    @JsonBackReference
     List<Category> categories = new ArrayList<>();
     @ManyToOne()
     @JoinColumn(
