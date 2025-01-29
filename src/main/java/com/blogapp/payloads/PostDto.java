@@ -1,12 +1,11 @@
 package com.blogapp.payloads;
 
-import com.blogapp.entities.Comment;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -16,7 +15,7 @@ public class PostDto {
     private String title;
     private String content;
     private String imageUrl;
-    private List<CategoryDto> categories;
+    private Set<CategoryDto> categories;
     private UserDto user;
     private Date addedDate;
 }

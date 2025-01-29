@@ -1,5 +1,6 @@
 package com.blogapp.controllers;
 
+import com.blogapp.payloads.ApiResponseDto;
 import com.blogapp.payloads.PostDto;
 import com.blogapp.services.PostService;
 import jakarta.validation.Valid;
@@ -23,6 +24,13 @@ public class PostController {
     public ResponseEntity<PostDto> createPostHandler(@Valid @RequestBody PostDto postDto){
         PostDto createdPost = this.postService.createPost(postDto);
         return new ResponseEntity<>(createdPost, HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/delete")
+    public  ResponseEntity<ApiResponseDto> deletePostHandler(@RequestParam("postId") String postId, @RequestParam("userId") String userId){
+        this.postService.deletePost(postId,userId);
+        ApiResponseDto apiResponseDto = new ApiResponseDto(true,"Post deleted successfully.");
+        return new ResponseEntity<>(apiResponseDto,HttpStatus.OK);
     }
 
     @GetMapping("/user")

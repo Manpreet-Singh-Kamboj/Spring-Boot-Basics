@@ -1,16 +1,14 @@
 package com.blogapp.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Entity(
         name = "Post"
@@ -48,6 +46,10 @@ public class Post {
     @NotEmpty(
             message = "Post content cannot be empty."
     )
+    @Size(
+            min = 10,
+            max = 1500
+    )
     private String content;
     @Column(
             name = "post_image_url"
@@ -68,7 +70,7 @@ public class Post {
             fetch = FetchType.LAZY
     )
     @JsonBackReference
-    List<Category> categories = new ArrayList<>();
+    Set<Category> categories = new HashSet<>();
     @ManyToOne()
     @JoinColumn(
             name = "user_id"

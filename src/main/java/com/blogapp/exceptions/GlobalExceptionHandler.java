@@ -50,4 +50,11 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(apiResponseDto,HttpStatus.CONFLICT);
     }
 
+    @ExceptionHandler(InvalidPostOwnerException.class)
+    public ResponseEntity<ApiResponseDto> invalidPostOwnerExceptionHandler(InvalidPostOwnerException invalidPostOwnerException){
+        String errorMessage = invalidPostOwnerException.getMessage();
+        ApiResponseDto apiResponseDto = new ApiResponseDto(false,errorMessage);
+        return new ResponseEntity<>(apiResponseDto,HttpStatus.UNAUTHORIZED);
+    }
+
 }
