@@ -1,5 +1,6 @@
 package com.blogapp.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
@@ -28,7 +29,9 @@ public class Post {
     )
     @Id
     @Column(
-            name = "id"
+            name = "id",
+            updatable = false,
+            nullable = false
     )
     private String id;
     @Column(
@@ -63,6 +66,7 @@ public class Post {
             mappedBy = "posts",
             fetch = FetchType.LAZY
     )
+    @JsonManagedReference
     List<Category> categories = new ArrayList<>();
     @ManyToOne()
     @JoinColumn(
@@ -72,6 +76,7 @@ public class Post {
     @Column(
             name = "added_date"
     )
+    @Temporal(TemporalType.TIMESTAMP)
     private Date addedDate;
     public Post(){
 

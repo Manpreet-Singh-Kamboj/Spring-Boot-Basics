@@ -30,7 +30,9 @@ public class User {
     )
     @Id
     @Column(
-            name = "id"
+            name = "id",
+            updatable = false,
+            nullable = false
     )
     private String id;
     @Column(

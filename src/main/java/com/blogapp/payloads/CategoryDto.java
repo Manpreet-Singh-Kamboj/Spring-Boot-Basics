@@ -13,5 +13,4 @@ import java.util.List;
 public class CategoryDto {
     private String id;
     private String category;
-    private List<PostDto> posts = new ArrayList<>();
 }

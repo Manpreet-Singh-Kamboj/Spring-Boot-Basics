@@ -1,5 +1,7 @@
 package com.blogapp.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
@@ -27,7 +29,9 @@ public class Category {
     )
     @Id
     @Column(
-            name = "id"
+            name = "id",
+            updatable = false,
+            nullable = false
     )
     private String id;
     @Column(
@@ -54,6 +58,7 @@ public class Category {
                     )
             }
     )
+    @JsonBackReference
     private List<Post> posts = new ArrayList<>();
 
     public Category(){
