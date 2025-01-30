@@ -33,6 +33,12 @@ public class PostController {
         return new ResponseEntity<>(apiResponseDto,HttpStatus.OK);
     }
 
+    @PutMapping("/update")
+    public ResponseEntity<PostDto> updatePostHandler(@RequestParam("postId") String postId, @RequestParam("userId")String userId, @Valid @RequestBody PostDto postDto){
+        PostDto updatedPost = this.postService.updatePost(postDto,postId,userId);
+        return new ResponseEntity<>(updatedPost,HttpStatus.OK);
+    }
+
     @GetMapping("/user")
     public ResponseEntity<List<PostDto>> getUserPostsHandler(@RequestParam("userId") String userId){
         List<PostDto> userPosts =  this.postService.getUserPosts(userId);

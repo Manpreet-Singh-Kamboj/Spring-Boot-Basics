@@ -65,9 +65,29 @@ public class PostServiceImplementation implements PostService {
         this.postRepository.deleteById(post.getId());
     }
 
+    // UPDATE REQ -> UPDATE USER POST -> ///TODO: ONLY POST OWNER AND AUTHORIZED USER CAN UPDATE THE POST
     @Override
-    public PostDto updatePost(PostDto postDto) {
-        return null;
+    public PostDto updatePost(PostDto postDto, String postId,String userId) {
+        Post post = this.postRepository.findById(postId).orElseThrow(()-> new ResourceNotFoundException("Post","Id",postId));
+        User postCreator = this.userRepository.findById(userId).orElseThrow(()-> new ResourceNotFoundException("User","Id",userId));
+        if(!postCreator.getPosts().contains(post)){
+            throw new InvalidPostOwnerException(postId,userId);
+        }
+        if(postDto.getTitle() != null){
+            post.setTitle(postDto.getTitle());
+        }
+        if(postDto.getContent() != null){
+            post.setContent(postDto.getContent());
+        }
+        if(postDto.getImageUrl() != null){
+            post.setImageUrl(postDto.getImageUrl());
+        }
+        if(postDto.getCategories() != null && !postDto.getCategories().isEmpty()){
+            Set<Category> categories = postDto.getCategories().stream().map(category-> this.categoryRepository.findById(category.getId()).orElseThrow(()-> new ResourceNotFoundException("Category","Id",category.getId()))).collect(Collectors.toSet());
+            post.setCategories(categories);
+        }
+        Post savedPost = this.postRepository.save(post);
+        return this.modelMapper.map(savedPost,PostDto.class);
     }
 
     // GET REQ -> GET USER POST -> ///TODO: NEED TO IMPLEMENT ONLY AUTHENTICATED USERS ACCESS THIS API.
