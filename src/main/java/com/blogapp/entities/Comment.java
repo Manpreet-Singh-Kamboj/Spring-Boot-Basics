@@ -7,6 +7,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity(
         name = "Comment"
 )
@@ -47,6 +50,15 @@ public class Comment {
             name = "user_id"
     )
     private User user;
+    @ManyToOne()
+    private Comment parentComment;
+    @OneToMany(
+            mappedBy = "parentComment",
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY,
+            orphanRemoval = true
+    )
+    private List<Comment> replies = new ArrayList<>();
     public Comment(){
 
     }
