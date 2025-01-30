@@ -49,7 +49,6 @@ public class PostServiceImplementation implements PostService {
         return this.modelMapper.map(savedPost,PostDto.class);
     }
 
-    // DELETE REQ -> DELETE USER POST -> ///TODO: ONLY POST OWNER AND AUTHORIZED USER CAN DELETE THE POST
     @Override
     public void deletePost(String postId,String userId) throws IllegalArgumentException {
         User user = this.userRepository.findById(userId).orElseThrow(()-> new ResourceNotFoundException("User","Id",userId));
@@ -65,7 +64,6 @@ public class PostServiceImplementation implements PostService {
         this.postRepository.deleteById(post.getId());
     }
 
-    // UPDATE REQ -> UPDATE USER POST -> ///TODO: ONLY POST OWNER AND AUTHORIZED USER CAN UPDATE THE POST
     @Override
     public PostDto updatePost(PostDto postDto, String postId,String userId) {
         Post post = this.postRepository.findById(postId).orElseThrow(()-> new ResourceNotFoundException("Post","Id",postId));
@@ -90,19 +88,29 @@ public class PostServiceImplementation implements PostService {
         return this.modelMapper.map(savedPost,PostDto.class);
     }
 
-    // GET REQ -> GET USER POST -> ///TODO: NEED TO IMPLEMENT ONLY AUTHENTICATED USERS ACCESS THIS API.
     @Override
     public List<PostDto> getUserPosts(String userId) {
         User user = this.userRepository.findById(userId).orElseThrow(()-> new ResourceNotFoundException("User","Id",userId));
        return user.getPosts().stream().map(post-> this.modelMapper.map(post,PostDto.class)).toList();
     }
 
-    // GET REQ -> GET POST BY CATEGORY
     @Override
     public List<PostDto> getPostByCategory(String categoryId) {
         Category category = this.categoryRepository.findById(categoryId).orElseThrow(()-> new ResourceNotFoundException("Category","Id",categoryId));
         List<Post> categoryPosts = this.postRepository.findAllByCategoryId(category.getId());
         return categoryPosts.stream().map(post-> this.modelMapper.map(post,PostDto.class)).toList();
+    }
+
+    @Override
+    public PostDto getPostById(String postId) {
+        Post post = this.postRepository.findById(postId).orElseThrow(()-> new ResourceNotFoundException("Post","Id",postId));
+        return this.modelMapper.map(post,PostDto.class);
+    }
+
+    @Override
+    public List<PostDto> getAllPosts() {
+        List<Post> allPosts = this.postRepository.findAll();
+        return allPosts.stream().map(post-> this.modelMapper.map(post,PostDto.class)).toList();
     }
 
 }

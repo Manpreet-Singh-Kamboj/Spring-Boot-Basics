@@ -10,4 +10,6 @@ public interface PostService {
     PostDto updatePost(PostDto postDto,String postId,String userId);
     List<PostDto> getUserPosts(String userId);
     List<PostDto> getPostByCategory(String categoryId);
+    PostDto getPostById(String postId);
+    List<PostDto> getAllPosts();
 }
