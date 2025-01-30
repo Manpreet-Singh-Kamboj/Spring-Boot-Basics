@@ -1,11 +1,9 @@
 package com.blogapp.controllers;
 
-import com.blogapp.entities.User;
-import com.blogapp.payloads.ApiResponseDto;
-import com.blogapp.payloads.UserDto;
+import com.blogapp.payloads.API.ApiResponseDto;
+import com.blogapp.payloads.User.UserDto;
 import com.blogapp.services.UserService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,8 +13,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+    public UserController(UserService userService){
+        this.userService = userService;
+    }
     // POST REQ -> CREATE USER
     @PostMapping("/sign-up")
     public ResponseEntity<UserDto> createUserHandler(@Valid @RequestBody UserDto userDto){

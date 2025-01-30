@@ -5,14 +5,13 @@ import com.blogapp.entities.Post;
 import com.blogapp.entities.User;
 import com.blogapp.exceptions.InvalidPostOwnerException;
 import com.blogapp.exceptions.ResourceNotFoundException;
-import com.blogapp.payloads.CategoryDto;
-import com.blogapp.payloads.PostDto;
+import com.blogapp.payloads.Category.CategoryDto;
+import com.blogapp.payloads.Post.PostDto;
 import com.blogapp.repository.CategoryRepository;
 import com.blogapp.repository.PostRepository;
 import com.blogapp.repository.UserRepository;
 import com.blogapp.services.PostService;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -22,14 +21,16 @@ import java.util.stream.Collectors;
 
 @Service
 public class PostServiceImplementation implements PostService {
-    @Autowired
-    private PostRepository postRepository;
-    @Autowired
-    private CategoryRepository categoryRepository;
-    @Autowired
-    UserRepository userRepository;
-    @Autowired
-    private ModelMapper modelMapper;
+    private final PostRepository postRepository;
+    private final CategoryRepository categoryRepository;
+    private final UserRepository userRepository;
+    private final ModelMapper modelMapper;
+    public PostServiceImplementation(PostRepository postRepository,CategoryRepository categoryRepository,UserRepository userRepository,ModelMapper modelMapper){
+        this.postRepository = postRepository;
+        this.categoryRepository = categoryRepository;
+        this.userRepository = userRepository;
+        this.modelMapper = modelMapper;
+    }
     @Override
     public PostDto createPost(PostDto postDto) {
         Set<CategoryDto> postCategories = postDto.getCategories();

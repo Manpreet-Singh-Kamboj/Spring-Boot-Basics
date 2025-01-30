@@ -1,10 +1,9 @@
 package com.blogapp.controllers;
 
-import com.blogapp.payloads.ApiResponseDto;
-import com.blogapp.payloads.CategoryDto;
+import com.blogapp.payloads.API.ApiResponseDto;
+import com.blogapp.payloads.Category.CategoryDto;
 import com.blogapp.services.CategoryService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,8 +13,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/category")
 public class CategoryController {
-    @Autowired
-    private CategoryService categoryService;
+    private final CategoryService categoryService;
+    public CategoryController(CategoryService categoryService){
+        this.categoryService = categoryService;
+    }
     // POST REQ -> CREATE CATEGORY -> ///TODO: ONLY ADMIN CAN CREATE A CATEGORY
     @PostMapping("/create")
     public ResponseEntity<CategoryDto> createCategoryHandler(@Valid @RequestBody CategoryDto categoryDto){

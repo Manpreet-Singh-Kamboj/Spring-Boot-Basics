@@ -1,11 +1,9 @@
 package com.blogapp.controllers;
 
-import com.blogapp.payloads.ApiResponseDto;
-import com.blogapp.payloads.PostDto;
+import com.blogapp.payloads.API.ApiResponseDto;
+import com.blogapp.payloads.Post.PostDto;
 import com.blogapp.services.PostService;
 import jakarta.validation.Valid;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,10 +13,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/post")
 public class PostController {
-    @Autowired
-    private PostService postService;
-    @Autowired
-    private ModelMapper modelMapper;
+    private final PostService postService;
+    public  PostController(PostService postService){
+        this.postService = postService;
+    }
     // POST REQ -> CREATE POST -> ///TODO:ONLY AUTHENTICATED USER WILL BE ALLOWED
     @PostMapping("/create")
     public ResponseEntity<PostDto> createPostHandler(@Valid @RequestBody PostDto postDto){

@@ -1,4 +1,4 @@
-package com.blogapp.payloads;
+package com.blogapp.payloads.User;
 
 import com.blogapp.constants.Roles;
 import com.blogapp.entities.Comment;

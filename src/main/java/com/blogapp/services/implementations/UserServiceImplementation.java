@@ -1,28 +1,26 @@
 package com.blogapp.services.implementations;
 
-import com.blogapp.constants.Roles;
 import com.blogapp.exceptions.ResourceNotFoundException;
-import com.blogapp.payloads.UserDto;
+import com.blogapp.payloads.User.UserDto;
 import com.blogapp.entities.User;
 import com.blogapp.exceptions.EmailAlreadyExistException;
 import com.blogapp.repository.UserRepository;
 import com.blogapp.services.UserService;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.EnumSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImplementation  implements UserService {
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private ModelMapper modelMapper;
+    private final UserRepository userRepository;
+    private final ModelMapper modelMapper;
+
+    public UserServiceImplementation(UserRepository userRepository,ModelMapper modelMapper){
+        this.userRepository = userRepository;
+        this.modelMapper = modelMapper;
+    }
 
     @Override
     public UserDto createUser(UserDto userDto) {

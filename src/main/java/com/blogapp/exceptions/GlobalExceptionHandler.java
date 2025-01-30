@@ -1,6 +1,6 @@
 package com.blogapp.exceptions;
 
-import com.blogapp.payloads.ApiResponseDto;
+import com.blogapp.payloads.API.ApiResponseDto;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -53,6 +53,13 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(InvalidPostOwnerException.class)
     public ResponseEntity<ApiResponseDto> invalidPostOwnerExceptionHandler(InvalidPostOwnerException invalidPostOwnerException){
         String errorMessage = invalidPostOwnerException.getMessage();
+        ApiResponseDto apiResponseDto = new ApiResponseDto(false,errorMessage);
+        return new ResponseEntity<>(apiResponseDto,HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(InvalidCommentOwnerException.class)
+    public ResponseEntity<ApiResponseDto> invalidCommentOwnerExceptionHandler(InvalidCommentOwnerException invalidCommentOwnerException){
+        String errorMessage = invalidCommentOwnerException.getMessage();
         ApiResponseDto apiResponseDto = new ApiResponseDto(false,errorMessage);
         return new ResponseEntity<>(apiResponseDto,HttpStatus.UNAUTHORIZED);
     }

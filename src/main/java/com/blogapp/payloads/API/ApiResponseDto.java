@@ -1,4 +1,4 @@
-package com.blogapp.payloads;
+package com.blogapp.payloads.API;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
