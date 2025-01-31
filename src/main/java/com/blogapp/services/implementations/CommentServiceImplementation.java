@@ -69,19 +69,28 @@ public class CommentServiceImplementation implements CommentService {
         if (!comment.getUser().getId().equals(userId)) {
             throw new InvalidCommentOwnerException(comment.getId(), userId);
         }
+        // First Deleting the Replies of the Comment
         if (!comment.getReplies().isEmpty()) {
+            // We are creating a copy of the comment replies because id we directly iterate over it and modify it the hibernate will throw and ConcurrentModificationException.
             List<Comment> replies = new ArrayList<>(comment.getReplies());
             for (Comment reply : replies) {
+                // Removing this reply from the comments replies
                 comment.getReplies().remove(reply);
+                // Removing the reply from the DB.
                 this.commentRepository.delete(reply);
             }
         }
+        // If this comment is a child of any comment removing it from its parents replies.
         if (comment.getParentComment() != null) {
             comment.getParentComment().getReplies().remove(comment);
-        } else if (comment.getPost() != null) {
+        }
+        // If it's the parent only removing it from the post on which it is commented.
+        else if (comment.getPost() != null) {
             comment.getPost().getComments().remove(comment);
         }
+        // Finally removing this comment from the users comments
         comment.getUser().getComments().remove(comment);
+        // Deleting the comment from the DB.
         this.commentRepository.delete(comment);
     }
 }
