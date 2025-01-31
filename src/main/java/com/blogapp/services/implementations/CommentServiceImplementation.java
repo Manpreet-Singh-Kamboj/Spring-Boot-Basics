@@ -67,17 +67,20 @@ public class CommentServiceImplementation implements CommentService {
         if (!comment.getUser().getId().equals(userId)) {
             throw new InvalidCommentOwnerException(comment.getId(), userId);
         }
-        Post post = null;
-        if(comment.getParentComment() == null){
-             post = comment.getPost();
-//             comment.setReplies(new ArrayList<>());
+        if (!comment.getReplies().isEmpty()) {
+            for (Comment reply : new ArrayList<>(comment.getReplies())) {
+                comment.getReplies().remove(reply);
+                this.commentRepository.delete(reply);
+            }
         }
-        User user = comment.getUser();
-        if(comment.getParentComment() == null && post != null){
-            post.getComments().remove(comment);
+        if (comment.getParentComment() != null) {
+            comment.getParentComment().getReplies().remove(comment);
+        } else if (comment.getPost() != null) {
+            comment.getPost().getComments().remove(comment);
         }
-        user.getComments().remove(comment);
-        this.commentRepository.deleteById(comment.getId());
+        comment.getUser().getComments().remove(comment);
+        this.commentRepository.delete(comment);
     }
+
 
 }
