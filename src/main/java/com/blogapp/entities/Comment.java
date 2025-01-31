@@ -54,7 +54,10 @@ public class Comment {
     private Comment parentComment;
     @OneToMany(
             mappedBy = "parentComment",
-            cascade = CascadeType.ALL,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            },
             fetch = FetchType.LAZY,
             orphanRemoval = true
     )

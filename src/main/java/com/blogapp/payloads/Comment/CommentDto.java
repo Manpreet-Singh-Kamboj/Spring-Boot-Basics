@@ -13,6 +13,7 @@ import lombok.Setter;
 public class CommentDto {
     private String id;
     private String comment;
+    private CommentPostDto parentComment;
     private PostCommentDto post;
     private UserDto user;
 }

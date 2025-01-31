@@ -13,6 +13,8 @@ import com.blogapp.services.CommentService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 public class CommentServiceImplementation implements CommentService {
     private final PostRepository postRepository;
@@ -27,11 +29,22 @@ public class CommentServiceImplementation implements CommentService {
     }
     @Override
     public CommentDto createComment(CommentDto commentDto) {
-        Post post = this.postRepository.findById(commentDto.getPost().getId()).orElseThrow(()-> new ResourceNotFoundException("Post","Id",commentDto.getPost().getId()));
+        Post post = null;
+        if(commentDto.getParentComment() == null){
+            post = this.postRepository.findById(commentDto.getPost().getId()).orElseThrow(()-> new ResourceNotFoundException("Post","Id",commentDto.getPost().getId()));
+        }
+        
         User user = this.userRepository.findById(commentDto.getUser().getId()).orElseThrow(()-> new ResourceNotFoundException("User","Id",commentDto.getUser().getId()));
         Comment comment = this.modelMapper.map(commentDto,Comment.class);
         comment.setUser(user);
-        comment.setPost(post);
+        if(commentDto.getParentComment() == null && post != null){
+            comment.setPost(post);
+        }
+        if(commentDto.getParentComment() != null){
+            Comment parentComment = this.commentRepository.findById(commentDto.getParentComment().getId()).orElseThrow(()-> new ResourceNotFoundException("Comment","Id",commentDto.getParentComment().getId()));
+            comment.setParentComment(parentComment);
+            parentComment.setUser(parentComment.getUser());
+        }
         Comment savedComment = this.commentRepository.save(comment);
         return this.modelMapper.map(savedComment,CommentDto.class);
     }
@@ -54,9 +67,15 @@ public class CommentServiceImplementation implements CommentService {
         if (!comment.getUser().getId().equals(userId)) {
             throw new InvalidCommentOwnerException(comment.getId(), userId);
         }
-        Post post = comment.getPost();
+        Post post = null;
+        if(comment.getParentComment() == null){
+             post = comment.getPost();
+//             comment.setReplies(new ArrayList<>());
+        }
         User user = comment.getUser();
-        post.getComments().remove(comment);
+        if(comment.getParentComment() == null && post != null){
+            post.getComments().remove(comment);
+        }
         user.getComments().remove(comment);
         this.commentRepository.deleteById(comment.getId());
     }
