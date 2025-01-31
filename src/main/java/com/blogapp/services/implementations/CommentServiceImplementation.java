@@ -6,6 +6,7 @@ import com.blogapp.entities.User;
 import com.blogapp.exceptions.InvalidCommentOwnerException;
 import com.blogapp.exceptions.ResourceNotFoundException;
 import com.blogapp.payloads.Comment.CommentDto;
+import com.blogapp.payloads.Comment.CommentPostDto;
 import com.blogapp.repository.CommentRepository;
 import com.blogapp.repository.PostRepository;
 import com.blogapp.repository.UserRepository;
@@ -14,6 +15,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class CommentServiceImplementation implements CommentService {
@@ -68,7 +70,8 @@ public class CommentServiceImplementation implements CommentService {
             throw new InvalidCommentOwnerException(comment.getId(), userId);
         }
         if (!comment.getReplies().isEmpty()) {
-            for (Comment reply : new ArrayList<>(comment.getReplies())) {
+            List<Comment> replies = new ArrayList<>(comment.getReplies());
+            for (Comment reply : replies) {
                 comment.getReplies().remove(reply);
                 this.commentRepository.delete(reply);
             }
@@ -81,6 +84,4 @@ public class CommentServiceImplementation implements CommentService {
         comment.getUser().getComments().remove(comment);
         this.commentRepository.delete(comment);
     }
-
-
 }
