@@ -97,6 +97,13 @@ public class User {
             orphanRemoval = true
     )
     private List<Comment> comments = new ArrayList<>();
+    @OneToMany(
+            mappedBy = "user",
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY,
+            orphanRemoval = true
+    )
+    private List<Like> likes = new ArrayList<>();
     public User(){
 
     }

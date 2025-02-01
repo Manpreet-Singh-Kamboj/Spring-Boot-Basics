@@ -82,6 +82,13 @@ public class Post {
     )
     @Temporal(TemporalType.TIMESTAMP)
     private Date addedDate;
+    @OneToMany(
+            mappedBy = "post",
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY,
+            orphanRemoval = true
+    )
+    private List<Like> likes = new ArrayList<>();
     public Post(){
 
     }

@@ -2,6 +2,7 @@ package com.blogapp.payloads.Post;
 
 import com.blogapp.payloads.Category.CategoryDto;
 import com.blogapp.payloads.Comment.CommentPostDto;
+import com.blogapp.payloads.Like.LikePostOrCommentDto;
 import com.blogapp.payloads.User.UserDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,4 +24,5 @@ public class PostDto {
     private UserDto user;
     private Date addedDate;
     private List<CommentPostDto> comments;
+    private List<LikePostOrCommentDto> likes;
 }

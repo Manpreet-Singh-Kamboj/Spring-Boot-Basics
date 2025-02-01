@@ -59,6 +59,13 @@ public class Comment {
             orphanRemoval = true
     )
     private List<Comment> replies = new ArrayList<>();
+    @OneToMany(
+            mappedBy = "comment",
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY,
+            orphanRemoval = true
+    )
+    private List<Like> likes = new ArrayList<>();
     public Comment(){
 
     }
