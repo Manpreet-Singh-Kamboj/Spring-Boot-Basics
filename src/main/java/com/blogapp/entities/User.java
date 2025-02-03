@@ -5,11 +5,14 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Entity(
@@ -20,7 +23,10 @@ import java.util.List;
 )
 @Getter
 @Setter
-public class User {
+@AllArgsConstructor
+@Builder
+@Data
+public class User implements UserDetails {
     @GenericGenerator(
             name = "uuid",
             strategy = "org.hibernate.id.UUIDGenerator"
@@ -63,11 +69,6 @@ public class User {
     @NotEmpty(
             message = "Password cannot be empty."
     )
-    @Size(
-            min = 6,
-            max = 32,
-            message = "Password must be at least 6 characters."
-    )
     private String password;
     @Column(
             name = "user_bio"
@@ -107,5 +108,38 @@ public class User {
     public User(){
 
     }
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(role.name()));
+    }
 
+    @Override
+    public String getUsername() {
+        return this.email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
+    @Override
+    public String getPassword() {
+        return this.password;
+    }
 }

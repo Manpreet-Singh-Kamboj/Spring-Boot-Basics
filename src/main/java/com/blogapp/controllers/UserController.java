@@ -24,6 +24,12 @@ public class UserController {
         return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
     }
 
+    // POST REQ -> LOGIN USER
+    public ResponseEntity<UserDto> loginUserHandler(@Valid @RequestBody UserDto userDto){
+        UserDto createdUser = this.userService.createUser(userDto);
+        return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
+    }
+
     // DELETE REQ -> DELETE USER
     @DeleteMapping("/delete/{userId}")
     public ResponseEntity<ApiResponseDto> deleteUserHandler(@PathVariable("userId") String userId){
