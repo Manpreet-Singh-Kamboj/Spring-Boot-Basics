@@ -1,5 +1,6 @@
 package com.blogapp.services.implementations;
 
+import com.blogapp.services.JWTService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -17,23 +18,26 @@ import java.util.Objects;
 import java.util.function.Function;
 
 @Service
-public class JWTService {
+public class JWTServiceImplementation implements JWTService {
     private final UserDetailsService userDetailsService;
-    public JWTService(UserDetailsService userDetailsService){
+    public JWTServiceImplementation(UserDetailsService userDetailsService){
         this.userDetailsService = userDetailsService;
     }
     @Value("${jwt.secretKey}")
     private String SECRET_KEY;
 
+    @Override
     public String extractUserName(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
+    @Override
     public <T> T extractClaim(String token, Function<Claims, T> claimResolver){
         final Claims claims = extractAllClaims(token);
         return claimResolver.apply(claims);
     }
 
+    @Override
     public Claims extractAllClaims(String token){
         return Jwts
                 .parser()
@@ -43,27 +47,33 @@ public class JWTService {
                 .getBody();
     }
 
+    @Override
     public Boolean isTokenValid(String token, UserDetails userDetails) {
         final String username = extractUserName(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
-    private boolean isTokenExpired(String token) {
+    @Override
+    public boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
 
-    private Date extractExpiration(String token) {
+    @Override
+    public Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
 
+    @Override
     public Key getSigningKey(){
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
         return Keys.hmacShaKeyFor(keyBytes);
     }
+    @Override
     public String getEmailFromToken(String token) {
         return extractUserName(token);
     }
 
+    @Override
     public Boolean validateToken(String token) {
         String userEmail = extractUserName(token);
         if (StringUtils.isNotEmpty(userEmail) && !isTokenExpired(token)) {
@@ -73,6 +83,7 @@ public class JWTService {
         return false;
     }
 
+    @Override
     public String generateRefresh(Map<String, Objects> extraClaims, UserDetails userDetails) {
         return Jwts
                 .builder()
@@ -84,6 +95,7 @@ public class JWTService {
                 .compact();
     }
 
+    @Override
     public String generateToken(Map<String, Objects> extraClaims, UserDetails userDetails) {
         return Jwts
                 .builder()

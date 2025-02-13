@@ -3,7 +3,7 @@ package com.blogapp.controllers;
 import com.blogapp.payloads.User.AuthenticationRequestDto;
 import com.blogapp.payloads.User.AuthenticationResponseDto;
 import com.blogapp.payloads.User.UserDto;
-import com.blogapp.services.implementations.AuthenticationService;
+import com.blogapp.services.implementations.AuthenticationServiceImplementation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/auth")
 public class AuthenticationController {
-    private final AuthenticationService authenticationService;
-    public AuthenticationController(AuthenticationService authenticationService){
+    private final AuthenticationServiceImplementation authenticationService;
+    public AuthenticationController(AuthenticationServiceImplementation authenticationService){
         this.authenticationService = authenticationService;
     }
     @PostMapping("/register")

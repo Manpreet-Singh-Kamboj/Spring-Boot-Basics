@@ -1,6 +1,6 @@
 package com.blogapp.filters;
 
-import com.blogapp.services.implementations.JWTService;
+import com.blogapp.services.JWTService;
 import io.micrometer.common.util.StringUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

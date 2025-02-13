@@ -7,8 +7,9 @@ import com.blogapp.payloads.User.AuthenticationResponseDto;
 import com.blogapp.payloads.User.AuthenticationUserResponseDto;
 import com.blogapp.payloads.User.UserDto;
 import com.blogapp.repository.UserRepository;
+import com.blogapp.services.AuthenticationService;
+import com.blogapp.services.JWTService;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,14 +19,14 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 
 @Service
-public class AuthenticationService {
+public class AuthenticationServiceImplementation implements AuthenticationService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JWTService jwtService;
     private final AuthenticationManager authenticationManager;
     private final ModelMapper modelMapper;
 
-    public AuthenticationService(UserRepository userRepository, PasswordEncoder passwordEncoder, JWTService jwtService, AuthenticationManager authenticationManager, ModelMapper modelMapper){
+    public AuthenticationServiceImplementation(UserRepository userRepository, PasswordEncoder passwordEncoder, JWTService jwtService, AuthenticationManager authenticationManager, ModelMapper modelMapper){
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
@@ -33,6 +34,7 @@ public class AuthenticationService {
         this.modelMapper = modelMapper;
     }
 
+    @Override
     public AuthenticationResponseDto register(@Valid UserDto registerRequest) {
         User convert = this.modelMapper.map(registerRequest,User.class);
         User user = User.builder()
@@ -52,6 +54,7 @@ public class AuthenticationService {
                 .user(this.modelMapper.map(user, AuthenticationUserResponseDto.class))
                 .build();
     }
+    @Override
     public AuthenticationResponseDto login(AuthenticationRequestDto authenticationRequest) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(authenticationRequest.getEmail(), authenticationRequest.getPassword())
@@ -67,6 +70,7 @@ public class AuthenticationService {
                 .build();
     }
 
+    @Override
     public AuthenticationResponseDto refreshToken(String refreshToken) {
         var user = userRepository.findByEmail(jwtService.getEmailFromToken(refreshToken)).orElseThrow(() -> new ResourceNotFoundException("User","Email",jwtService.getEmailFromToken(refreshToken)));
         var jwtToken = jwtService.generateToken(new HashMap<>(),user);
@@ -79,6 +83,7 @@ public class AuthenticationService {
                 .build();
     }
 
+    @Override
     public Boolean validateToken(String token) {
         return jwtService.validateToken(token);
     }
